@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  # === MySQL database service ===
+  db:
+    image: mysql:8.0                    # Use official MySQL image
+    container_name: demo-mysql
+    restart: always                     # Auto-restart if it stops
+    environment:
+      # These variables are understood by the MySQL image and
+      # are used to create the initial DB, user and passwords.
+      MYSQL_ROOT_PASSWORD: rootpassword # Root password (for local learning only)
+      MYSQL_DATABASE: demo_db           # Database that will be created on first run
+      MYSQL_USER: demo_user             # Non-root user name
+      MYSQL_PASSWORD: demo_password     # Password for the non-root user
+    ports:
+      - "3307:3306"                     # Host port 3307 -> container 3306 (MySQL)
+    volumes:
+      - db_data:/var/lib/mysql          # Persist data in a named Docker volume
+
+  # === FastAPI application service ===
+  api:
+    build: ./api                        # Build image using Dockerfile in ./api
+    container_name: demo-api
+    restart: always
+    depends_on:
+      - db                              # Make sure db service starts before api
+    environment:
+      # These env vars are read in app.py to connect to MySQL.
+      # The host is the service name "db" above (Docker internal DNS).
+      DB_HOST: db
+      DB_PORT: "3306"
+      DB_NAME: demo_db
+      DB_USER: demo_user
+      DB_PASSWORD: demo_password
+    ports:
+      - "8000:8000"                     # Host port 8000 -> container 8000 (FastAPI)
+
+# === Volumes ===
+# Named volume so MySQL data is not lost when you remove containers.
+volumes:
+  db_data:
+
