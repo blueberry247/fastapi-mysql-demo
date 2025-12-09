@@ -10,7 +10,7 @@ COPY requirements.txt .
 # Install system packages needed for mysqlclient, then Python deps
 RUN apt-get update && apt-get install -y \
       build-essential \
-      default-libmysqlclient-dev \
+      libmysqlclient-dev \
       pkg-config \
     && pip install --no-cache-dir -r requirements.txt \
     && apt-get purge -y build-essential pkg-config \
