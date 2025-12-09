@@ -16,5 +16,5 @@ COPY app.py .
 # Command to run when the container starts:
 #   - uvicorn runs the FastAPI app
 #   - "app:app" means: file app.py, variable 'app'
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 
