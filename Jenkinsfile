@@ -10,9 +10,11 @@ pipeline {
 
         stage('Deploy to Deb-01') {
             steps {
-                sshagent(credentials: ['deb01-ssh']) {
+                withCredentials([sshUserPrivateKey(credentialsId: 'deb01-ssh',
+                                                  keyFileVariable: 'SSH_KEY',
+                                                  usernameVariable: 'SSH_USER')]) {
                     sh '''
-                      ssh -o StrictHostKeyChecking=no ansible@deb-01 "
+                      ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no "$SSH_USER"@deb-01 "
                         cd ~/fastapi-mysql-demo && \
                         git pull && \
                         docker compose up --build -d
@@ -23,4 +25,5 @@ pipeline {
         }
     }
 }
+
 
