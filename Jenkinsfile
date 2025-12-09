@@ -16,7 +16,7 @@ pipeline {
                     sh '''
                       ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no "$SSH_USER"@deb-01 "
                         cd ~/fastapi-mysql-demo && \
-                        git pull && \
+                        git pull origin main && \
                         docker compose up --build -d
                       "
                     '''
