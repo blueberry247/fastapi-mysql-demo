@@ -12,9 +12,9 @@ class Settings(BaseModel):
 
     @property
     def sqlalchemy_database_uri(self) -> str:
-        # mysql+mysqldb uses the mysqlclient driver
+        # mysql+pymysql uses the pure-Python pymysql driver
         return (
-            f"mysql+mysqldb://{self.db_user}:{self.db_password}"
+            f"mysql+pymysql://{self.db_user}:{self.db_password}"
             f"@{self.db_host}:{self.db_port}/{self.db_name}"
         )
 
